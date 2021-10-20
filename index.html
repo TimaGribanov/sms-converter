@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>GSM-7 Converter</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+
+    <link rel="stylesheet" href="style.css"/>
+    <script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+<header class="header">GSM-7 Converter</header>
+<div class="container" id="base">
+    <div class="form-group" id="hex-block">
+        <label for="hex">HEX string:</label>
+        <textarea class="form-control" rows="3" id="hex"></textarea>
+    </div>
+    <div class="row justify-content-md-center" id="buttons">
+        <div class="col-sm-1">
+            <button type="submit" id="submit" name="submit" class="btn btn-primary mb-2" onclick="convert()">Convert</button>
+        </div>
+        <div class="col-sm-1">
+            <button type="submit" id="reverse" name="reverse" class="btn btn-outline-primary" onclick="reverse()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                    <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                    <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div class="form-group" id="text-block">
+        <label for="text">Text string:</label>
+        <textarea class="form-control" rows="3" id="text" readonly="readonly"></textarea>
+    </div>
+</div>
+<footer class="footer">Timofey Gribanov © 2021</footer>
+</body>
+</html>
