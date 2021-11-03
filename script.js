@@ -9,12 +9,17 @@ let gsmSevenArr = [
     ['¿', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o'],
     ['p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'ä', 'ö', 'ñ', 'ü', 'à']
 ];
-//split binary or HEX string to octets
+/**
+ * Splits binary or HEX string to octets.
+ * @param input input string of the function (either HEX or binary)
+ * @param base original radix (2 for binary input and 16 for HEX input)
+ * @returns an array containing octets
+ */
 let splitBinHex = (input, base) => {
     let charArray = input.split('');
     let finalCharsArray = [];
     let err = '';
-    if (base === 16) { //to convert from HEX
+    if (base === 16) { //to split HEX
         //check for wrong symbols
         for (let element of charArray) {
             if (!element.match(/[a-fA-F0-9]/)) {
@@ -35,7 +40,7 @@ let splitBinHex = (input, base) => {
             }
         }
     }
-    else if (base === 2) { //to convert to HEX
+    else if (base === 2) { //to split binary
         //check for wrong symbols
         for (let element of charArray) {
             if (element != '0' && element != '1') {
@@ -61,7 +66,54 @@ let splitBinHex = (input, base) => {
     }
     return finalCharsArray;
 };
-//convert body (with UDH or wiihout)
+/**
+ * Returns the converted string.
+ * @param input input string of the function (either HEX or binary)
+ * @param base original radix (2 for binary input and 16 for HEX input)
+ * @returns converted string
+ */
+let convertBinHex = (input, base) => {
+    let convertedString = '';
+    if (base === 16) { //convert from HEX to binary
+        const splitHex = splitBinHex(input, 16);
+        let bin = '';
+        splitHex.forEach(e => {
+            bin += (parseInt(e, 16).toString(2)).padStart(8, '0');
+        });
+        convertedString = bin;
+    }
+    else if (base === 2) { //convert from binary to HEX
+        const hex = parseInt(input, 2).toString(16).toUpperCase();
+        convertedString = hex;
+    }
+    else {
+        console.log('Error! Base for convertBinHex is not 2 or 16!');
+    }
+    return convertedString;
+};
+/**
+ * Packs SM body from symbols to HEX for 7-bit algotithm
+ * @param input string with message payload in HEX
+ * @returns unpacked from 7-bit to 8-bit string
+ */
+let pack = (input) => {
+    let packed = '';
+    return packed;
+};
+/**
+ * Unpacks SM body from HEX to symbols for 7-bit algorithm
+ * @param input string with message payload in HEX
+ * @returns unpacked from 7-bit to 8-bit string
+ */
+let upack = (input) => {
+    let unpacked = '';
+    return unpacked;
+};
+/**
+ * Converts body (with UDH or without) from HEX.
+ * @param input string with SM body
+ * @returns converted SM body
+ */
 let gsmSevenBody = (input) => {
     let udh = false;
     let splitBody = splitBinHex(input, 2);
@@ -71,10 +123,16 @@ let gsmSevenBody = (input) => {
         const notSM = udhl + 2; //UDH length, UDHL value plus 2 octets (UDL and UDHL themselves)
     }
     else {
+        upack(input);
     }
     let decodedBody = '';
     return decodedBody;
 };
+/**
+ * Converts SM from HEX.
+ * @param input string with SM
+ * @returns converted SM
+ */
 let gsmSeven = (input) => {
     let decodedSM = '';
     return decodedSM;
