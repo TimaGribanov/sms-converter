@@ -107,6 +107,24 @@ let pack = (input) => {
  */
 let upack = (input) => {
     let unpacked = '';
+    const binInput = convertBinHex(input, 16);
+    const binOctets = splitBinHex(binInput, 2);
+    let binOctetsTemp = [];
+    let binSeptets = [];
+    binOctetsTemp[2] = binOctets[0];
+    for (let i = 0; i < binOctets.length; i++) {
+        binOctetsTemp[0] = binOctetsTemp[2].slice(0, -7); //Head
+        binOctetsTemp[1] = binOctetsTemp[2].slice(-7); //Septet
+        binSeptets.push(binOctetsTemp[1]); //Move septet to another array
+        binOctetsTemp[2] = binOctets[i + 1] + '' + binOctetsTemp[0]; //Connect next octet with its tail
+    }
+    ;
+    binSeptets.forEach(e => {
+        const head = parseInt(e.slice(0, 3), 2);
+        const tail = parseInt(e.slice(-4), 2);
+        console.log(head + ', ' + tail);
+        unpacked += gsmSevenArr[head][tail];
+    });
     return unpacked;
 };
 /**

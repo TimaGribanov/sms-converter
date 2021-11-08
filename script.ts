@@ -95,6 +95,7 @@ let convertBinHex = (input: string, base: number): string => {
  */
 let pack = (input: string): string => {
   let packed: string = '';
+
   return packed;
 }
 
@@ -105,6 +106,30 @@ let pack = (input: string): string => {
  */
 let upack = (input: string): string => {
   let unpacked: string ='';
+
+  const binInput: string = convertBinHex(input, 16);
+  const binOctets: string[] = splitBinHex(binInput, 2);
+  let binOctetsTemp: string[] = [];
+  let binSeptets: string[] = [];
+  binOctetsTemp[2] = binOctets[0];
+
+  for (let i = 0; i < binOctets.length; i++) {
+    binOctetsTemp[0] = binOctetsTemp[2].slice(0, -7); //Head
+    binOctetsTemp[1] = binOctetsTemp[2].slice(-7); //Septet
+
+    binSeptets.push(binOctetsTemp[1]); //Move septet to another array
+    binOctetsTemp[2] = binOctets[i + 1] + '' + binOctetsTemp[0]; //Connect next octet with its tail
+  };
+
+  binSeptets.forEach(e => {
+    const head: number = parseInt(e.slice(0, 3), 2);
+    const tail: number = parseInt(e.slice(-4), 2);
+
+    console.log(head + ', ' + tail);
+
+    unpacked += gsmSevenArr[head][tail];
+  });
+
   return unpacked;
 }
 
