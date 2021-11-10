@@ -92,12 +92,103 @@ let convertBinHex = (input, base) => {
     return convertedString;
 };
 /**
+ * Searches for indexes of two-dimensional array
+ * @param input string for each it looks for in an array
+ * @param array array of strings to look in
+ * @returns an array of numbers containing indexes
+ * https://stackoverflow.com/a/16102526
+ */
+let find2DimIndex = (input, array) => {
+    let index1 = 0;
+    let index2 = 0;
+    for (let i = 0; i < array.length; i++) {
+        const element = array[i];
+        index2 = element.indexOf(input);
+        if (index2 > -1) {
+            index1 = i;
+            break;
+        }
+    }
+    return [index1, index2];
+};
+/**
  * Packs SM body from symbols to HEX for 7-bit algotithm
  * @param input string with message payload in HEX
  * @returns unpacked from 7-bit to 8-bit string
  */
 let pack = (input) => {
     let packed = '';
+    const inputArr = input.split(''); //An array of the input string split into separate symbols
+    let septetArr = [];
+    let j = 0;
+    inputArr.forEach(e => {
+        let sept = ''; //A character converted into septets
+        let indexes = find2DimIndex(e, gsmSevenArr);
+        let indexesBin = [];
+        indexes.forEach(element => {
+            indexesBin.push(Number(element).toString(2));
+        });
+        indexesBin[0] = indexesBin[0].padStart(3, '0');
+        indexesBin[1] = indexesBin[1].padStart(4, '0');
+        septetArr.push(sept);
+        sept = indexesBin[0] + '' + indexesBin[1];
+        septetArr[j] = sept;
+        j++;
+    });
+    let octetArr = [];
+    let octetArrTemp = [];
+    const septetsEightsCount = Math.floor(septetArr.length / 8); //A number of eights
+    let septetsEightsTail;
+    if (septetArr.length / 8 == septetsEightsCount) {
+        septetsEightsTail = false;
+    }
+    else {
+        septetsEightsTail = true;
+    }
+    for (let k = 1; k <= septetsEightsCount; k++) {
+        octetArrTemp[2] = septetArr[8 * k - 1 - 7];
+        let l = 0;
+        do {
+            let tail = 8 - octetArrTemp[2].length;
+            octetArrTemp[1] = septetArr[8 * k - 1 - (l + 1)].slice(-tail);
+            octetArrTemp[0] = octetArrTemp[1] + '' + octetArrTemp[2];
+            octetArrTemp[2] = septetArr[8 * k - 1 - (l + 1)].slice(0, -tail);
+            octetArr.push(octetArrTemp[0]);
+            l++;
+        } while (l < 7);
+    } //INSTEAD OF ‘Popolnenie’ I GOT ‘Penlopo’
+    /*
+    octetArrTemp[2] = septetArr[0]; //Previous part to be filled up to octet
+    console.log(septetArr);
+  
+    for (let i = 0; i < septetArr.length; i++) {
+      let tail: number = 8 - octetArrTemp[2].length; //A tail to be cut from the next septet
+      console.log('Current part to fill: ', octetArrTemp[2]);
+      console.log('Next septet: ', septetArr[i + 1]);
+      console.log('Tail\'s length: ', tail);
+      if (i == septetArr.length - 1) {
+        octetArrTemp[0] = octetArrTemp[2].padStart(8, '0');
+      } else {
+        octetArrTemp[1] = septetArr[i + 1].slice(-tail); //The tail to be the head
+        console.log('Tail: ', octetArrTemp[1]);
+        octetArrTemp[0] = octetArrTemp[1] + '' + octetArrTemp[2]; //The filled octet
+        if (tail != 7) {
+          octetArrTemp[2] = septetArr[i + 1].slice(0, -tail); //New previous part
+        } else {
+          octetArrTemp[2] = septetArr[i + 2]; //New previous part if tail is 7
+        }
+        console.log('Next current septet: ', octetArrTemp[2]);
+      }
+      octetArr.push(octetArrTemp[0]);
+      console.log('Got octet: ', octetArr[i]);
+      console.log('');
+      
+    }
+    */
+    octetArr.forEach(element => {
+        let hexElement = convertBinHex(element, 2);
+        packed += hexElement;
+    });
     return packed;
 };
 /**
@@ -122,7 +213,6 @@ let upack = (input) => {
     binSeptets.forEach(e => {
         const head = parseInt(e.slice(0, 3), 2);
         const tail = parseInt(e.slice(-4), 2);
-        console.log(head + ', ' + tail);
         unpacked += gsmSevenArr[head][tail];
     });
     return unpacked;
