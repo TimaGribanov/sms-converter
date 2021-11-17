@@ -9,6 +9,49 @@
 
     <link rel="stylesheet" href="style.css"/>
     <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript">
+        let i = 0;
+
+const reverse = function() {
+    const base = document.getElementById('base');
+    const hexBlock = document.getElementById('hex-block');
+    const textBlock = document.getElementById('text-block');
+    const buttons = document.getElementById('buttons');
+
+    if (i%2 === 0) {
+        base.insertBefore(buttons,hexBlock);
+        base.insertBefore(textBlock,buttons);
+        textBlock.lastElementChild.readOnly = false;
+        hexBlock.lastElementChild.readOnly = true;
+        hexBlock.lastElementChild.value = '';
+        i++;
+    }
+    else {
+        base.insertBefore(buttons,textBlock);
+        base.insertBefore(hexBlock,buttons);
+        hexBlock.lastElementChild.readOnly = false;
+        textBlock.lastElementChild.readOnly = true;
+        textBlock.lastElementChild.value = '';
+        i++;
+    }
+};
+
+const convert = function() {
+    let hex  = document.getElementById('hex').value;
+    let text = document.getElementById('text').value;
+
+    //If the i counter is even then convert from hex, if it's odd then convert to hex
+    if (i%2 === 0) {
+        //document.getElementById('text').value = hex;
+        console.log(hex);
+        document.getElementById('text').value = upack(hex);
+    }
+    else {
+        //document.getElementById('hex').value = text;
+        document.getElementById('hex').value = pack(text);
+    }
+}
+    </script>
 </head>
 <body>
 <header class="header">GSM-7 Converter</header>

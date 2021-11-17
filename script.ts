@@ -1,12 +1,12 @@
 let gsmSevenArr: string[][] = [
-  ['@','£','$','¥','è','é','ù','ì','ò','Ç','\\n','Ø','ø','\\r','Å','å'],
-  ['Δ','_','Φ','Γ','Λ','Ω','Π','Ψ','Σ','Θ','Ξ','','\\f','^','{','}','\\','[','~',']','|','€','Æ','æ','ß','É'],
-  [' ','!','\"','#','¤','%','&','\'','(',')','*','\=+',',','-','.','/'],
-  ['0','1','2','3','4',	'5','6','7','8','9',':',';','<','=','>','?'],
-  ['¡','A','B','C','D',	'E','F','G','H','I','J','K','L','M','N','O'],
-  ['P','Q','R','S','T',	'U','V','W','X','Y','Z','Ä','Ö','Ñ','Ü','§'],
-  ['¿','a','b','c','d',	'e','f','g','h','i','j','k','l','m','n','o'],
-  ['p','q','r','s','t','u','v','w','x','y','z','ä','ö','ñ','ü','à']
+  ['@', '£', '$', '¥', 'è', 'é', 'ù', 'ì', 'ò', 'Ç', '\\n', 'Ø', 'ø', '\\r', 'Å', 'å'],
+  ['Δ', '_', 'Φ', 'Γ', 'Λ', 'Ω', 'Π', 'Ψ', 'Σ', 'Θ', 'Ξ', '', '\\f', '^', '{', '}', '\\', '[', '~', ']', '|', '€', 'Æ', 'æ', 'ß', 'É'],
+  [' ', '!', '\"', '#', '¤', '%', '&', '\'', '(', ')', '*', '\=+', ',', '-', '.', '/'],
+  ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?'],
+  ['¡', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'],
+  ['P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Ä', 'Ö', 'Ñ', 'Ü', '§'],
+  ['¿', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o'],
+  ['p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'ä', 'ö', 'ñ', 'ü', 'à']
 ]
 
 /**
@@ -22,7 +22,7 @@ let splitBinHex = (input: string, base: number): string[] => {
 
   if (base === 16) { //to split HEX
     //check for wrong symbols
-    for (let element of charArray){
+    for (let element of charArray) {
       if (!element.match(/[a-fA-F0-9]/)) {
         alert('Error! HEX string must contain only digits or letters from A to F!');
         err = 'non-hex';
@@ -40,7 +40,7 @@ let splitBinHex = (input: string, base: number): string[] => {
     }
   } else if (base === 2) { //to split binary
     //check for wrong symbols
-    for (let element of charArray){
+    for (let element of charArray) {
       if (element != '0' && element != '1') {
         alert('Error! Binary string must contain only 0 or 1!');
         err = 'non-binary';
@@ -52,7 +52,7 @@ let splitBinHex = (input: string, base: number): string[] => {
       console.log('Input string is not binary!');
     } else {
       for (let i = 0; i < charArray.length; i += 8) {
-        let digits: string = charArray[i] + charArray[i + 1] + charArray[i + 2]+ charArray[i + 3] + charArray[i + 4] + charArray[i + 5] + charArray[i + 6] + charArray[i + 7];
+        let digits: string = charArray[i] + charArray[i + 1] + charArray[i + 2] + charArray[i + 3] + charArray[i + 4] + charArray[i + 5] + charArray[i + 6] + charArray[i + 7];
         finalCharsArray.push(digits);
       }
     }
@@ -152,10 +152,10 @@ let pack = (input: string): string => {
 
     for (let m = 0; m < slicedSeptetArr.length - 1; m++) {
       let tail: number = 8 - octetArrTemp[2].length;
-        octetArrTemp[1] = slicedSeptetArr[m + 1].slice(-tail);
-        octetArrTemp[0] = octetArrTemp[1] + '' + octetArrTemp[2];
-        octetArrTemp[2] = slicedSeptetArr[m + 1].slice(0, -tail);
-        octetArr.push(octetArrTemp[0]);
+      octetArrTemp[1] = slicedSeptetArr[m + 1].slice(-tail);
+      octetArrTemp[0] = octetArrTemp[1] + '' + octetArrTemp[2];
+      octetArrTemp[2] = slicedSeptetArr[m + 1].slice(0, -tail);
+      octetArr.push(octetArrTemp[0]);
     }
 
     l = 8 * k;
@@ -190,16 +190,16 @@ let pack = (input: string): string => {
  * @returns unpacked from 7-bit to 8-bit string
  */
 let upack = (input: string): string => {
-  let unpacked: string ='';
-  
+  let unpacked: string = '';
+
   const binInput: string = convertBinHex(input, 16);
   const binOctets: string[] = splitBinHex(binInput, 2);
-  const bonOctetsLength: number = binOctets.length / 7;
+  const binOctetsLength: number = binOctets.length / 7;
   let binOctetsTemp: string[] = [];
   let binSeptets: string[] = [];
   binOctetsTemp[2] = binOctets[0];
 
-  for (let i = 0; i < binOctets.length + bonOctetsLength; i++) {
+  for (let i = 0; i < binOctets.length + binOctetsLength - 1; i++) {
     binOctetsTemp[0] = binOctetsTemp[2].slice(0, -7); //Head
     binOctetsTemp[1] = binOctetsTemp[2].slice(-7); //Septet
 

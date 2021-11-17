@@ -184,11 +184,11 @@ let upack = (input) => {
     let unpacked = '';
     const binInput = convertBinHex(input, 16);
     const binOctets = splitBinHex(binInput, 2);
-    const bonOctetsLength = binOctets.length / 7;
+    const binOctetsLength = binOctets.length / 7;
     let binOctetsTemp = [];
     let binSeptets = [];
     binOctetsTemp[2] = binOctets[0];
-    for (let i = 0; i < binOctets.length + bonOctetsLength; i++) {
+    for (let i = 0; i < binOctets.length + binOctetsLength - 1; i++) {
         binOctetsTemp[0] = binOctetsTemp[2].slice(0, -7); //Head
         binOctetsTemp[1] = binOctetsTemp[2].slice(-7); //Septet
         binSeptets.push(binOctetsTemp[1]); //Move septet to another array
