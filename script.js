@@ -83,7 +83,7 @@ let convertBinHex = (input, base) => {
         convertedString = bin;
     }
     else if (base === 2) { //convert from binary to HEX
-        const hex = parseInt(input, 2).toString(16).toUpperCase();
+        const hex = (parseInt(input, 2).toString(16).toUpperCase()).padStart(2, '0');
         convertedString = hex;
     }
     else {
@@ -145,46 +145,30 @@ let pack = (input) => {
     else {
         septetsEightsTail = true;
     }
+    let l = 0; //start of new sub-array
     for (let k = 1; k <= septetsEightsCount; k++) {
-        octetArrTemp[2] = septetArr[8 * k - 1 - 7];
-        let l = 0;
-        do {
+        const slicedSeptetArr = septetArr.slice(l, 8 * k);
+        octetArrTemp[2] = slicedSeptetArr[0];
+        for (let m = 0; m < slicedSeptetArr.length - 1; m++) {
             let tail = 8 - octetArrTemp[2].length;
-            octetArrTemp[1] = septetArr[8 * k - 1 - (l + 1)].slice(-tail);
+            octetArrTemp[1] = slicedSeptetArr[m + 1].slice(-tail);
             octetArrTemp[0] = octetArrTemp[1] + '' + octetArrTemp[2];
-            octetArrTemp[2] = septetArr[8 * k - 1 - (l + 1)].slice(0, -tail);
+            octetArrTemp[2] = slicedSeptetArr[m + 1].slice(0, -tail);
             octetArr.push(octetArrTemp[0]);
-            l++;
-        } while (l < 7);
-    } //INSTEAD OF ‘Popolnenie’ I GOT ‘Penlopo’
-    /*
-    octetArrTemp[2] = septetArr[0]; //Previous part to be filled up to octet
-    console.log(septetArr);
-  
-    for (let i = 0; i < septetArr.length; i++) {
-      let tail: number = 8 - octetArrTemp[2].length; //A tail to be cut from the next septet
-      console.log('Current part to fill: ', octetArrTemp[2]);
-      console.log('Next septet: ', septetArr[i + 1]);
-      console.log('Tail\'s length: ', tail);
-      if (i == septetArr.length - 1) {
-        octetArrTemp[0] = octetArrTemp[2].padStart(8, '0');
-      } else {
-        octetArrTemp[1] = septetArr[i + 1].slice(-tail); //The tail to be the head
-        console.log('Tail: ', octetArrTemp[1]);
-        octetArrTemp[0] = octetArrTemp[1] + '' + octetArrTemp[2]; //The filled octet
-        if (tail != 7) {
-          octetArrTemp[2] = septetArr[i + 1].slice(0, -tail); //New previous part
-        } else {
-          octetArrTemp[2] = septetArr[i + 2]; //New previous part if tail is 7
         }
-        console.log('Next current septet: ', octetArrTemp[2]);
-      }
-      octetArr.push(octetArrTemp[0]);
-      console.log('Got octet: ', octetArr[i]);
-      console.log('');
-      
+        l = 8 * k;
     }
-    */
+    if (septetsEightsTail) {
+        const slicedSeptetArr = septetArr.slice(l, septetArr.length);
+        octetArrTemp[2] = slicedSeptetArr[0];
+        for (let m = 0; m < slicedSeptetArr.length - 1; m++) {
+            let tail = 8 - octetArrTemp[2].length;
+            octetArrTemp[1] = slicedSeptetArr[m + 1].slice(-tail);
+            octetArrTemp[0] = octetArrTemp[1] + '' + octetArrTemp[2];
+            octetArrTemp[2] = slicedSeptetArr[m + 1].slice(0, -tail);
+            octetArr.push(octetArrTemp[0]);
+        }
+    }
     octetArr.forEach(element => {
         let hexElement = convertBinHex(element, 2);
         packed += hexElement;
@@ -200,10 +184,11 @@ let upack = (input) => {
     let unpacked = '';
     const binInput = convertBinHex(input, 16);
     const binOctets = splitBinHex(binInput, 2);
+    const bonOctetsLength = binOctets.length / 7;
     let binOctetsTemp = [];
     let binSeptets = [];
     binOctetsTemp[2] = binOctets[0];
-    for (let i = 0; i < binOctets.length; i++) {
+    for (let i = 0; i < binOctets.length + bonOctetsLength; i++) {
         binOctetsTemp[0] = binOctetsTemp[2].slice(0, -7); //Head
         binOctetsTemp[1] = binOctetsTemp[2].slice(-7); //Septet
         binSeptets.push(binOctetsTemp[1]); //Move septet to another array
