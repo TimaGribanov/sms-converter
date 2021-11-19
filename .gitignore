@@ -1,5 +1,4 @@
 /node_modules
-/package-lock.json
+package-lock.json
 script_old.js
-tsconfig.json
 gsm7.csv
