@@ -168,6 +168,7 @@ let pack = (input) => {
             octetArrTemp[2] = slicedSeptetArr[m + 1].slice(0, -tail);
             octetArr.push(octetArrTemp[0]);
         }
+        octetArr.push(octetArrTemp[2]);
     }
     octetArr.forEach(element => {
         let hexElement = convertBinHex(element, 2);
