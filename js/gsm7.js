@@ -1,5 +1,5 @@
-"use strict";
-let gsmSevenArr = [
+import * as baseJS from './base.js';
+const gsmSevenArr = [
     ['@', '£', '$', '¥', 'è', 'é', 'ù', 'ì', 'ò', 'Ç', '\\n', 'Ø', 'ø', '\\r', 'Å', 'å'],
     ['Δ', '_', 'Φ', 'Γ', 'Λ', 'Ω', 'Π', 'Ψ', 'Σ', 'Θ', 'Ξ', '', '\\f', '^', '{', '}', '\\', '[', '~', ']', '|', '€', 'Æ', 'æ', 'ß', 'É'],
     [' ', '!', '\"', '#', '¤', '%', '&', '\'', '(', ')', '*', '\=+', ',', '-', '.', '/'],
@@ -10,72 +10,15 @@ let gsmSevenArr = [
     ['p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'ä', 'ö', 'ñ', 'ü', 'à']
 ];
 /**
- * Splits binary or HEX string to octets.
- * @param input input string of the function (either HEX or binary)
- * @param base original radix (2 for binary input and 16 for HEX input)
- * @returns an array containing octets
- */
-let splitBinHex = (input, base) => {
-    let charArray = input.split('');
-    let finalCharsArray = [];
-    let err = '';
-    if (base === 16) { //to split HEX
-        //check for wrong symbols
-        for (let element of charArray) {
-            if (!element.match(/[a-fA-F0-9]/)) {
-                alert('Error! HEX string must contain only digits or letters from A to F!');
-                err = 'non-hex';
-                break;
-            }
-        }
-        ;
-        //process depending on err
-        if (err === 'non-hex') {
-            console.log('Input string is not HEX!');
-        }
-        else {
-            for (let i = 0; i < charArray.length; i += 2) {
-                let digits = charArray[i] + charArray[i + 1];
-                finalCharsArray.push(digits);
-            }
-        }
-    }
-    else if (base === 2) { //to split binary
-        //check for wrong symbols
-        for (let element of charArray) {
-            if (element != '0' && element != '1') {
-                alert('Error! Binary string must contain only 0 or 1!');
-                err = 'non-binary';
-                break;
-            }
-        }
-        ;
-        //process depending on err
-        if (err == 'non-binary') {
-            console.log('Input string is not binary!');
-        }
-        else {
-            for (let i = 0; i < charArray.length; i += 8) {
-                let digits = charArray[i] + charArray[i + 1] + charArray[i + 2] + charArray[i + 3] + charArray[i + 4] + charArray[i + 5] + charArray[i + 6] + charArray[i + 7];
-                finalCharsArray.push(digits);
-            }
-        }
-    }
-    else { //if not binary or HEX
-        alert('Error! Base not 2 or 16!');
-    }
-    return finalCharsArray;
-};
-/**
  * Returns the converted string.
  * @param input input string of the function (either HEX or binary)
  * @param base original radix (2 for binary input and 16 for HEX input)
  * @returns converted string
  */
-let convertBinHex = (input, base) => {
+const convertBinHex = (input, base) => {
     let convertedString = '';
     if (base === 16) { //convert from HEX to binary
-        const splitHex = splitBinHex(input, 16);
+        const splitHex = baseJS.splitBinHex(input, 16);
         let bin = '';
         splitHex.forEach(e => {
             bin += (parseInt(e, 16).toString(2)).padStart(8, '0');
@@ -98,7 +41,7 @@ let convertBinHex = (input, base) => {
  * @returns an array of numbers containing indexes
  * https://stackoverflow.com/a/16102526
  */
-let find2DimIndex = (input, array) => {
+const find2DimIndex = (input, array) => {
     let index1 = 0;
     let index2 = 0;
     for (let i = 0; i < array.length; i++) {
@@ -116,7 +59,7 @@ let find2DimIndex = (input, array) => {
  * @param input string with message payload in HEX
  * @returns unpacked from 7-bit to 8-bit string
  */
-let pack = (input) => {
+export const pack = (input) => {
     let packed = '';
     const inputArr = input.split(''); //An array of the input string split into separate symbols
     let septetArr = [];
@@ -181,10 +124,10 @@ let pack = (input) => {
  * @param input string with message payload in HEX
  * @returns unpacked from 7-bit to 8-bit string
  */
-let upack = (input) => {
+export const upack = (input) => {
     let unpacked = '';
     const binInput = convertBinHex(input, 16);
-    const binOctets = splitBinHex(binInput, 2);
+    const binOctets = baseJS.splitBinHex(binInput, 2);
     const binOctetsLength = binOctets.length / 7;
     let binOctetsTemp = [];
     let binSeptets = [];
@@ -210,7 +153,7 @@ let upack = (input) => {
  */
 let gsmSevenBody = (input) => {
     let udh = false;
-    let splitBody = splitBinHex(input, 2);
+    let splitBody = baseJS.splitBinHex(input, 2);
     if (udh) {
         const udl = parseInt(splitBody[0], 2); //SM length without UDL, total number of septets from UDHL until the end
         const udhl = parseInt(splitBody[1], 2); //UDH length without UDH and UDHL, total number of octets in UDH

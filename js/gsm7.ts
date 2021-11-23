@@ -1,4 +1,6 @@
-let gsmSevenArr: string[][] = [
+import * as baseJS from './base.js';
+
+const gsmSevenArr = [
     ['@', '£', '$', '¥', 'è', 'é', 'ù', 'ì', 'ò', 'Ç', '\\n', 'Ø', 'ø', '\\r', 'Å', 'å'],
     ['Δ', '_', 'Φ', 'Γ', 'Λ', 'Ω', 'Π', 'Ψ', 'Σ', 'Θ', 'Ξ', '', '\\f', '^', '{', '}', '\\', '[', '~', ']', '|', '€', 'Æ', 'æ', 'ß', 'É'],
     [' ', '!', '\"', '#', '¤', '%', '&', '\'', '(', ')', '*', '\=+', ',', '-', '.', '/'],
@@ -10,76 +12,23 @@ let gsmSevenArr: string[][] = [
   ]
   
   /**
-   * Splits binary or HEX string to octets.
-   * @param input input string of the function (either HEX or binary)
-   * @param base original radix (2 for binary input and 16 for HEX input)
-   * @returns an array containing octets
-   */
-  let splitBinHex = (input: string, base: number): string[] => {
-    let charArray: string[] = input.split('');
-    let finalCharsArray: string[] = [];
-    let err: string = '';
-  
-    if (base === 16) { //to split HEX
-      //check for wrong symbols
-      for (let element of charArray) {
-        if (!element.match(/[a-fA-F0-9]/)) {
-          alert('Error! HEX string must contain only digits or letters from A to F!');
-          err = 'non-hex';
-          break;
-        }
-      };
-      //process depending on err
-      if (err === 'non-hex') {
-        console.log('Input string is not HEX!');
-      } else {
-        for (let i = 0; i < charArray.length; i += 2) {
-          let digits: string = charArray[i] + charArray[i + 1];
-          finalCharsArray.push(digits);
-        }
-      }
-    } else if (base === 2) { //to split binary
-      //check for wrong symbols
-      for (let element of charArray) {
-        if (element != '0' && element != '1') {
-          alert('Error! Binary string must contain only 0 or 1!');
-          err = 'non-binary';
-          break;
-        }
-      };
-      //process depending on err
-      if (err == 'non-binary') {
-        console.log('Input string is not binary!');
-      } else {
-        for (let i = 0; i < charArray.length; i += 8) {
-          let digits: string = charArray[i] + charArray[i + 1] + charArray[i + 2] + charArray[i + 3] + charArray[i + 4] + charArray[i + 5] + charArray[i + 6] + charArray[i + 7];
-          finalCharsArray.push(digits);
-        }
-      }
-    } else { //if not binary or HEX
-      alert('Error! Base not 2 or 16!');
-    }
-    return finalCharsArray;
-  }
-  
-  /**
    * Returns the converted string.
    * @param input input string of the function (either HEX or binary)
    * @param base original radix (2 for binary input and 16 for HEX input)
    * @returns converted string
    */
-  let convertBinHex = (input: string, base: number): string => {
-    let convertedString: string = '';
+  const convertBinHex = (input: string, base: number): string => {
+    let convertedString = '';
   
     if (base === 16) { //convert from HEX to binary
-      const splitHex: string[] = splitBinHex(input, 16);
-      let bin: string = '';
+      const splitHex = baseJS.splitBinHex(input, 16);
+      let bin = '';
       splitHex.forEach(e => {
         bin += (parseInt(e, 16).toString(2)).padStart(8, '0');
       });
       convertedString = bin;
     } else if (base === 2) { //convert from binary to HEX
-      const hex: string = (parseInt(input, 2).toString(16).toUpperCase()).padStart(2, '0');
+      const hex = (parseInt(input, 2).toString(16).toUpperCase()).padStart(2, '0');
       convertedString = hex;
     } else {
       console.log('Error! Base for convertBinHex is not 2 or 16!');
@@ -95,9 +44,9 @@ let gsmSevenArr: string[][] = [
    * @returns an array of numbers containing indexes
    * https://stackoverflow.com/a/16102526
    */
-  let find2DimIndex = (input: string, array: string[][]): number[] => {
-    let index1: number = 0;
-    let index2: number = 0;
+  const find2DimIndex = (input: string, array: string[][]): number[] => {
+    let index1 = 0;
+    let index2 = 0;
     for (let i = 0; i < array.length; i++) {
       const element = array[i];
       index2 = element.indexOf(input);
@@ -114,14 +63,14 @@ let gsmSevenArr: string[][] = [
    * @param input string with message payload in HEX
    * @returns unpacked from 7-bit to 8-bit string
    */
-  let pack = (input: string): string => {
-    let packed: string = '';
-    const inputArr: string[] = input.split(''); //An array of the input string split into separate symbols
+  export const pack = (input: string): string => {
+    let packed = '';
+    const inputArr = input.split(''); //An array of the input string split into separate symbols
     let septetArr: string[] = [];
-    let j: number = 0;
+    let j = 0;
     inputArr.forEach(e => {
-      let sept: string = ''; //A character converted into septets
-      let indexes: number[] = find2DimIndex(e, gsmSevenArr);
+      let sept = ''; //A character converted into septets
+      let indexes = find2DimIndex(e, gsmSevenArr);
       let indexesBin: string[] = [];
       indexes.forEach(element => {
         indexesBin.push(Number(element).toString(2));
@@ -146,12 +95,12 @@ let gsmSevenArr: string[][] = [
   
     let l: number = 0; //start of new sub-array
     for (let k = 1; k <= septetsEightsCount; k++) {
-      const slicedSeptetArr: string[] = septetArr.slice(l, 8 * k);
+      const slicedSeptetArr = septetArr.slice(l, 8 * k);
   
       octetArrTemp[2] = slicedSeptetArr[0];
   
       for (let m = 0; m < slicedSeptetArr.length - 1; m++) {
-        let tail: number = 8 - octetArrTemp[2].length;
+        let tail = 8 - octetArrTemp[2].length;
         octetArrTemp[1] = slicedSeptetArr[m + 1].slice(-tail);
         octetArrTemp[0] = octetArrTemp[1] + '' + octetArrTemp[2];
         octetArrTemp[2] = slicedSeptetArr[m + 1].slice(0, -tail);
@@ -163,12 +112,12 @@ let gsmSevenArr: string[][] = [
   
   
     if (septetsEightsTail) {
-      const slicedSeptetArr: string[] = septetArr.slice(l, septetArr.length);
+      const slicedSeptetArr = septetArr.slice(l, septetArr.length);
   
       octetArrTemp[2] = slicedSeptetArr[0];
   
       for (let m = 0; m < slicedSeptetArr.length - 1; m++) {
-        let tail: number = 8 - octetArrTemp[2].length;
+        let tail = 8 - octetArrTemp[2].length;
         octetArrTemp[1] = slicedSeptetArr[m + 1].slice(-tail);
         octetArrTemp[0] = octetArrTemp[1] + '' + octetArrTemp[2];
         octetArrTemp[2] = slicedSeptetArr[m + 1].slice(0, -tail);
@@ -179,7 +128,7 @@ let gsmSevenArr: string[][] = [
     }
   
     octetArr.forEach(element => {
-      let hexElement: string = convertBinHex(element, 2);
+      let hexElement = convertBinHex(element, 2);
       packed += hexElement;
     });
   
@@ -191,12 +140,12 @@ let gsmSevenArr: string[][] = [
    * @param input string with message payload in HEX
    * @returns unpacked from 7-bit to 8-bit string
    */
-  let upack = (input: string): string => {
-    let unpacked: string = '';
+  export const upack = (input: string): string => {
+    let unpacked = '';
   
-    const binInput: string = convertBinHex(input, 16);
-    const binOctets: string[] = splitBinHex(binInput, 2);
-    const binOctetsLength: number = binOctets.length / 7;
+    const binInput = convertBinHex(input, 16);
+    const binOctets = baseJS.splitBinHex(binInput, 2);
+    const binOctetsLength = binOctets.length / 7;
     let binOctetsTemp: string[] = [];
     let binSeptets: string[] = [];
     binOctetsTemp[2] = binOctets[0];
@@ -225,18 +174,18 @@ let gsmSevenArr: string[][] = [
    * @returns converted SM body
    */
   let gsmSevenBody = (input: string): string => {
-    let udh: boolean = false;
-    let splitBody: string[] = splitBinHex(input, 2);
+    let udh = false;
+    let splitBody = baseJS.splitBinHex(input, 2);
     if (udh) {
-      const udl: number = parseInt(splitBody[0], 2); //SM length without UDL, total number of septets from UDHL until the end
-      const udhl: number = parseInt(splitBody[1], 2); //UDH length without UDH and UDHL, total number of octets in UDH
-      const notSM: number = udhl + 2; //UDH length, UDHL value plus 2 octets (UDL and UDHL themselves)
+      const udl = parseInt(splitBody[0], 2); //SM length without UDL, total number of septets from UDHL until the end
+      const udhl = parseInt(splitBody[1], 2); //UDH length without UDH and UDHL, total number of octets in UDH
+      const notSM = udhl + 2; //UDH length, UDHL value plus 2 octets (UDL and UDHL themselves)
   
     } else {
       upack(input);
     }
   
-    let decodedBody: string = '';
+    let decodedBody = '';
   
     return decodedBody;
   }
@@ -247,7 +196,7 @@ let gsmSevenArr: string[][] = [
    * @returns converted SM
    */
   let gsmSeven = (input: string): string => {
-    let decodedSM: string = '';
+    let decodedSM = '';
   
     return decodedSM;
   }

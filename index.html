@@ -3,81 +3,58 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>GSM-7 Converter</title>
+    <title>SMS Converter</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
 
     <link rel="stylesheet" href="style.css"/>
-    <script type="text/javascript" src="script.js"></script>
-    <script type="text/javascript">
-        let i = 0;
-
-const reverse = function() {
-    const base = document.getElementById('base');
-    const hexBlock = document.getElementById('hex-block');
-    const textBlock = document.getElementById('text-block');
-    const buttons = document.getElementById('buttons');
-
-    if (i%2 === 0) {
-        base.insertBefore(buttons,hexBlock);
-        base.insertBefore(textBlock,buttons);
-        textBlock.lastElementChild.readOnly = false;
-        hexBlock.lastElementChild.readOnly = true;
-        hexBlock.lastElementChild.value = '';
-        i++;
-    }
-    else {
-        base.insertBefore(buttons,textBlock);
-        base.insertBefore(hexBlock,buttons);
-        hexBlock.lastElementChild.readOnly = false;
-        textBlock.lastElementChild.readOnly = true;
-        textBlock.lastElementChild.value = '';
-        i++;
-    }
-};
-
-const convert = function() {
-    let hex  = document.getElementById('hex').value;
-    let text = document.getElementById('text').value;
-
-    //If the i counter is even then convert from hex, if it's odd then convert to hex
-    if (i%2 === 0) {
-        //document.getElementById('text').value = hex;
-        console.log(hex);
-        document.getElementById('text').value = upack(hex);
-    }
-    else {
-        //document.getElementById('hex').value = text;
-        document.getElementById('hex').value = pack(text);
-    }
-}
-    </script>
+    <script type="module" src="./js/script.js"></script>
+    <script type="module" src="./js/base.js"></script>
 </head>
 <body>
-<header class="header">GSM-7 Converter</header>
+<header class="header">SMS Converter</header>
 <div class="container" id="base">
-    <div class="form-group" id="hex-block">
-        <label for="hex">HEX string:</label>
-        <textarea class="form-control" rows="3" id="hex"></textarea>
+    <div class="form-group" id="input-block">
+        <label for="hex">Input:</label>
+        <textarea class="form-control" rows="3" id="input"></textarea>
     </div>
-    <div class="row justify-content-md-center" id="buttons">
-        <div class="col-sm-1">
-            <button type="submit" id="submit" name="submit" class="btn btn-primary mb-2" onclick="convert()">Convert</button>
+    <div class="col">
+        <div class="row justify-content-md-center mt-4">
+            <div class="form-check-inline">
+                <input class="form-check-input" type="radio" name="gsm7" id="gsm7-radio" checked>
+                <label class="form-check-label" for="gsm7">GSM7</label>
+            </div>
+            <div class="form-check-inline">
+                <input class="form-check-input" type="radio" name="ucs2" id="ucs2-radio">
+                <label class="form-check-label" for="ucs2">UCS2/Unicode</label>
+            </div>
+            <div class="form-check-inline">
+                <input class="form-check-input" type="radio" name="8bit" id="8bit-radio">
+                <label class="form-check-label" for="8bit">8bit</label>
+            </div>
         </div>
-        <div class="col-sm-1">
-            <button type="submit" id="reverse" name="reverse" class="btn btn-outline-primary" onclick="reverse()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
-                    <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
-                    <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
-                </svg>
-            </button>
+        <div class="row justify-content-md-center mt-4">
+            <div class="form-check-inline">
+                <input class="form-check-input" type="radio" name="unpack-msg" id="unpack-msg-radio" checked>
+                <label class="form-check-label" for="pack-msg">Decode</label>
+            </div>
+            <div class="form-check-inline">
+                <input class="form-check-input" type="radio" name="pack-msg" id="pack-msg-radio">
+                <label class="form-check-label" for="pack-msg">Code</label>
+            </div>
+        </div>
+        <div class="row justify-content-md-center mt-4">
+            <button type="submit" id="submit" name="submit" class="btn btn-primary mb-2">Convert</button>
         </div>
     </div>
-    <div class="form-group" id="text-block">
-        <label for="text">Text string:</label>
-        <textarea class="form-control" rows="3" id="text" readonly="readonly"></textarea>
+    <div class="form-group mt-0" id="output-block">
+        <label for="text">Output:</label>
+        <textarea class="form-control" rows="3" id="output" readonly="readonly"></textarea>
     </div>
+
+    <div class="push"></div>
 </div>
-<footer class="footer">Timofey Gribanov © 2021</footer>
+<footer class="footer fixed-bottom">Timofey Gribanov © 2021</footer>
 </body>
 </html>
