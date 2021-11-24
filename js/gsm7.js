@@ -1,14 +1,25 @@
 import * as baseJS from './base.js';
 const gsmSevenArr = [
     ['@', '£', '$', '¥', 'è', 'é', 'ù', 'ì', 'ò', 'Ç', '\\n', 'Ø', 'ø', '\\r', 'Å', 'å'],
-    ['Δ', '_', 'Φ', 'Γ', 'Λ', 'Ω', 'Π', 'Ψ', 'Σ', 'Θ', 'Ξ', '', '\\f', '^', '{', '}', '\\', '[', '~', ']', '|', '€', 'Æ', 'æ', 'ß', 'É'],
-    [' ', '!', '\"', '#', '¤', '%', '&', '\'', '(', ')', '*', '\=+', ',', '-', '.', '/'],
+    ['Δ', '_', 'Φ', 'Γ', 'Λ', 'Ω', 'Π', 'Ψ', 'Σ', 'Θ', 'Ξ', '', 'Æ', 'æ', 'ß', 'É'],
+    [' ', '!', '\"', '#', '¤', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/'],
     ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?'],
     ['¡', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'],
     ['P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Ä', 'Ö', 'Ñ', 'Ü', '§'],
     ['¿', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o'],
     ['p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'ä', 'ö', 'ñ', 'ü', 'à']
 ];
+const extensionTable = [
+    ['', '', '', '', '', '', '', '', '', '', '\\f', '', '', '', '', ''],
+    ['', '', '', '', '^', '', '', '', '', '', '', '', '', '', '', ''],
+    ['', '', '', '', '', '', '', '', '{', '}', '', '', '', '', '', '\\'],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '[', '~', ']', ''],
+    ['|', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+    ['', '', '', '', '', '€', '', '', '', '', '', '', '', '', '', ''],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+];
+//const extensionTable = ['\\f', '^', '{', '}', '\\', '[', '~', ']', '|', '€'];
 /**
  * Returns the converted string.
  * @param input input string of the function (either HEX or binary)
@@ -64,9 +75,18 @@ export const pack = (input) => {
     const inputArr = input.split(''); //An array of the input string split into separate symbols
     let septetArr = [];
     let j = 0;
+    let indexes;
     inputArr.forEach(e => {
         let sept = ''; //A character converted into septets
-        let indexes = find2DimIndex(e, gsmSevenArr);
+        if (e === '^' || e === '{' || e === '}' || e === '\\' || e === '[' || e === ']' || e === '~' || e === '|' || e === '€' || e === '\\f') {
+            indexes = find2DimIndex(e, extensionTable);
+            septetArr[j] = '0011011';
+            j++;
+        }
+        else {
+            console.log('usual');
+            indexes = find2DimIndex(e, gsmSevenArr);
+        }
         let indexesBin = [];
         indexes.forEach(element => {
             indexesBin.push(Number(element).toString(2));
@@ -139,11 +159,21 @@ export const upack = (input) => {
         binOctetsTemp[2] = binOctets[i + 1] + '' + binOctetsTemp[0]; //Connect next octet with its tail
     }
     ;
-    binSeptets.forEach(e => {
-        const head = parseInt(e.slice(0, 3), 2);
-        const tail = parseInt(e.slice(-4), 2);
-        unpacked += gsmSevenArr[head][tail];
-    });
+    for (let i = 0; i < binSeptets.length; i++) {
+        const e = binSeptets[i];
+        if (e === '0011011') {
+            let nextElem = binSeptets[i + 1];
+            const head = parseInt(nextElem.slice(0, 3), 2);
+            const tail = parseInt(nextElem.slice(-4), 2);
+            unpacked += extensionTable[head][tail];
+            i++;
+        }
+        else {
+            const head = parseInt(e.slice(0, 3), 2);
+            const tail = parseInt(e.slice(-4), 2);
+            unpacked += gsmSevenArr[head][tail];
+        }
+    }
     return unpacked;
 };
 /**
