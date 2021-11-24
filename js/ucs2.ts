@@ -9,7 +9,7 @@ export const pack = (input: string): string => {
     let packed = '';
 
     for (let i = 0; i < input.length; i++) {
-        packed += input.charCodeAt(i).toString(16).padStart(4, '0');
+        packed += input.charCodeAt(i).toString(16).padStart(4, '0').toUpperCase;
     }
 
     return packed;
