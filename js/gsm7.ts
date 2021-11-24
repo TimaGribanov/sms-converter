@@ -200,36 +200,3 @@ export const upack = (input: string): string => {
 
   return unpacked;
 }
-
-/**
- * Converts body (with UDH or without) from HEX.
- * @param input string with SM body
- * @returns converted SM body
- */
-let gsmSevenBody = (input: string): string => {
-  let udh = false;
-  let splitBody = baseJS.splitBinHex(input, 2);
-  if (udh) {
-    const udl = parseInt(splitBody[0], 2); //SM length without UDL, total number of septets from UDHL until the end
-    const udhl = parseInt(splitBody[1], 2); //UDH length without UDH and UDHL, total number of octets in UDH
-    const notSM = udhl + 2; //UDH length, UDHL value plus 2 octets (UDL and UDHL themselves)
-
-  } else {
-    upack(input);
-  }
-
-  let decodedBody = '';
-
-  return decodedBody;
-}
-
-/**
- * Converts SM from HEX.
- * @param input string with SM
- * @returns converted SM
- */
-let gsmSeven = (input: string): string => {
-  let decodedSM = '';
-
-  return decodedSM;
-}
