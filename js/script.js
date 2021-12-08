@@ -105,19 +105,16 @@ $('#gsm7-radio').on('click', function () {
     $('#gsm7-radio').prop('checked', true);
     $('#ucs2-radio').prop('checked', false);
     $('#8bit-radio').prop('checked', false);
-    alphabet = 0;
 });
 $('#ucs2-radio').on('click', function () {
     $('#gsm7-radio').prop('checked', false);
     $('#ucs2-radio').prop('checked', true);
     $('#8bit-radio').prop('checked', false);
-    alphabet = 1;
 });
 $('#8bit-radio').on('click', function () {
     $('#gsm7-radio').prop('checked', false);
     $('#ucs2-radio').prop('checked', false);
     $('#8bit-radio').prop('checked', true);
-    alphabet = 2;
 });
 $('#unpack-msg-radio').on('click', function () {
     $('#unpack-msg-radio').prop('checked', true);
@@ -126,30 +123,22 @@ $('#unpack-msg-radio').on('click', function () {
 $('#pack-msg-radio').on('click', function () {
     $('#unpack-msg-radio').prop('checked', false);
     $('#pack-msg-radio').prop('checked', true);
-});
-$('#udh-checkbox').on('click', function () {
-    if (udh) {
-        udh = false;
-    }
-    else {
-        udh = true;
-    }
+    $('#udh-checkbox').prop('disabled', true);
+    $('#udh-checkbox').prop('checked', false);
 });
 $('#submit').on('click', function () {
-    /*switch (alphabet) {
-       case 0:
-          if($('#unpack-msg-radio').is(':checked')) { $('#output').val(gsm7.upack(String($('#input').val()))) };
-          if($('#pack-msg-radio').is(':checked')) { $('#output').val(gsm7.pack(String($('#input').val()))) };
-          break;
-       case 1:
-          if($('#unpack-msg-radio').is(':checked')) { $('#output').val(ucs2.upack(String($('#input').val()))) };
-          if($('#pack-msg-radio').is(':checked')) { $('#output').val(ucs2.pack(String($('#input').val()))) };
-          break;
-       case 2:
-          if($('#unpack-msg-radio').is(':checked')) { $('#output').val(eightBit.upack(String($('#input').val()))) };
-          if($('#pack-msg-radio').is(':checked')) { $('#output').val(eightBit.pack(String($('#input').val()))) };
-          break;
-    }*/
+    if ($('#gsm7-radio').is(':checked')) {
+        alphabet = 0;
+    }
+    if ($('#ucs2-radio').is(':checked')) {
+        alphabet = 1;
+    }
+    if ($('#8bit-radio').is(':checked')) {
+        alphabet = 2;
+    }
+    if ($('#udh-checkbox').is(':checked')) {
+        udh = true;
+    }
     if ($('#unpack-msg-radio').is(':checked')) {
         $('#udhl-cell').text(decodeBody(String($('#input').val()), udh, alphabet)[0]);
         $('#udh-cell').html('<p>' + decodeBody(String($('#input').val()), udh, alphabet)[1] + '</p><p>Reference Number: ' + decodeBody(String($('#input').val()), udh, alphabet)[2] + '</p><p>Total Parts: ' + decodeBody(String($('#input').val()), udh, alphabet)[3] + '</p><p>Current Part: ' + decodeBody(String($('#input').val()), udh, alphabet)[4] + '</p>');
