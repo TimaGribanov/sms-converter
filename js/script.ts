@@ -3,7 +3,6 @@ import * as gsm7 from './gsm7.js';
 import * as ucs2 from './ucs2.js';
 import * as eightBit from './8bit.js';
 import * as baseJS from './base.js';
-import { collapseTextChangeRangesAcrossMultipleVersions } from '../node_modules/typescript/lib/typescript.js';
 
 /**
  * Converts body (with UDH or without) from HEX.
@@ -108,6 +107,11 @@ let codeBody = (input: string, alphabet: number): string => {
 let alphabet = 0; //0 – gsm7, 1 – ucs2, 2 – 8bit
 let udh = false;
 
+$(function () {
+   $('#udh-checkbox').prop('checked', false);
+   $('.udh-row').hide();
+})
+
 $('#gsm7-radio').on('click', function () {
    $('#gsm7-radio').prop('checked', true);
    $('#ucs2-radio').prop('checked', false);
@@ -153,6 +157,12 @@ $('#submit').on('click', function () {
 
    if ($('#udh-checkbox').is(':checked')) {
       udh = true
+   }
+
+   if (udh) {
+      $('.udh-row').show();
+   } else {
+      $('.udh-row').hide();
    }
 
    if ($('#unpack-msg-radio').is(':checked')) {
