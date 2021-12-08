@@ -22,8 +22,12 @@
     <div class="col">
         <div class="row justify-content-md-center mt-4">
             <div class="form-check-inline">
-                <input class="form-check-input" type="checkbox" name="udh" id="udh-checkbox">
-                <label class="form-check-label" for="udh">Contains UDH</label>
+                <input class="form-check-input" type="radio" name="unpack-msg" id="unpack-msg-radio" checked>
+                <label class="form-check-label" for="pack-msg">Decode</label>
+            </div>
+            <div class="form-check-inline">
+                <input class="form-check-input" type="radio" name="pack-msg" id="pack-msg-radio">
+                <label class="form-check-label" for="pack-msg">Code</label>
             </div>
         </div>
         <div class="row justify-content-md-center mt-4">
@@ -42,24 +46,42 @@
         </div>
         <div class="row justify-content-md-center mt-4">
             <div class="form-check-inline">
-                <input class="form-check-input" type="radio" name="unpack-msg" id="unpack-msg-radio" checked>
-                <label class="form-check-label" for="pack-msg">Decode</label>
-            </div>
-            <div class="form-check-inline">
-                <input class="form-check-input" type="radio" name="pack-msg" id="pack-msg-radio">
-                <label class="form-check-label" for="pack-msg">Code</label>
+                <input class="form-check-input" type="checkbox" name="udh" id="udh-checkbox">
+                <label class="form-check-label" for="udh">Contains UDH</label>
             </div>
         </div>
         <div class="row justify-content-md-center mt-4">
             <button type="submit" id="submit" name="submit" class="btn btn-primary mb-2">Convert</button>
         </div>
     </div>
-    <div class="form-group mt-0" id="output-block">
-        <label for="text">Output:</label>
-        <textarea class="form-control" rows="3" id="output" readonly="readonly"></textarea>
-    </div>
-
-    <div class="push"></div>
+    <hr/>
+    <table class="table table-bordered table-striped table-sm" id="udh-block">
+        <thead></thead>
+        <tbody>
+            <!--tr>
+                <th scope="row">User Data Length</th>
+                <td id="udl-cell"></td>
+            </tr-->
+            <tr>
+                <th scope="row">User Data Header Length</th>
+                <td id="udhl-cell"></td>
+            </tr>
+            <tr>
+                <th scope="row">User Data Header</th>
+                <td id="udh-cell"></td>
+            </tr>
+            <tr>
+                <th>SM Body</th>
+                <td> 
+                    <div class="form-group m-0" id="output-block">
+                        <!--label for="text" class="m-0"></label-->
+                        <textarea class="form-control" rows="3" id="output" readonly="readonly"></textarea>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
 </div>
 <footer class="footer fixed-bottom">Timofey Gribanov © 2021</footer>
 </body>

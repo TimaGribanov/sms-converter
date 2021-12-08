@@ -21,31 +21,6 @@ const extensionTable = [
 ];
 //const extensionTable = ['\\f', '^', '{', '}', '\\', '[', '~', ']', '|', '€'];
 /**
- * Returns the converted string.
- * @param input input string of the function (either HEX or binary)
- * @param base original radix (2 for binary input and 16 for HEX input)
- * @returns converted string
- */
-const convertBinHex = (input, base) => {
-    let convertedString = '';
-    if (base === 16) { //convert from HEX to binary
-        const splitHex = baseJS.splitBinHex(input, 16);
-        let bin = '';
-        splitHex.forEach(e => {
-            bin += (parseInt(e, 16).toString(2)).padStart(8, '0');
-        });
-        convertedString = bin;
-    }
-    else if (base === 2) { //convert from binary to HEX
-        const hex = (parseInt(input, 2).toString(16).toUpperCase()).padStart(2, '0');
-        convertedString = hex;
-    }
-    else {
-        console.log('Error! Base for convertBinHex is not 2 or 16!');
-    }
-    return convertedString;
-};
-/**
  * Searches for indexes of two-dimensional array
  * @param input string for each it looks for in an array
  * @param array array of strings to look in
@@ -134,7 +109,7 @@ export const pack = (input) => {
         octetArr.push(octetArrTemp[2]);
     }
     octetArr.forEach(element => {
-        let hexElement = convertBinHex(element, 2);
+        let hexElement = baseJS.convertBinHex(element, 2);
         packed += hexElement;
     });
     return packed;
@@ -146,7 +121,7 @@ export const pack = (input) => {
  */
 export const upack = (input) => {
     let unpacked = '';
-    const binInput = convertBinHex(input, 16);
+    const binInput = baseJS.convertBinHex(input, 16);
     const binOctets = baseJS.splitBinHex(binInput, 2);
     const binOctetsLength = binOctets.length / 7;
     let binOctetsTemp = [];
@@ -175,32 +150,4 @@ export const upack = (input) => {
         }
     }
     return unpacked;
-};
-/**
- * Converts body (with UDH or without) from HEX.
- * @param input string with SM body
- * @returns converted SM body
- */
-let gsmSevenBody = (input) => {
-    let udh = false;
-    let splitBody = baseJS.splitBinHex(input, 2);
-    if (udh) {
-        const udl = parseInt(splitBody[0], 2); //SM length without UDL, total number of septets from UDHL until the end
-        const udhl = parseInt(splitBody[1], 2); //UDH length without UDH and UDHL, total number of octets in UDH
-        const notSM = udhl + 2; //UDH length, UDHL value plus 2 octets (UDL and UDHL themselves)
-    }
-    else {
-        upack(input);
-    }
-    let decodedBody = '';
-    return decodedBody;
-};
-/**
- * Converts SM from HEX.
- * @param input string with SM
- * @returns converted SM
- */
-let gsmSeven = (input) => {
-    let decodedSM = '';
-    return decodedSM;
 };

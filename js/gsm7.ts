@@ -25,32 +25,6 @@ const extensionTable = [
 //const extensionTable = ['\\f', '^', '{', '}', '\\', '[', '~', ']', '|', '€'];
 
 /**
- * Returns the converted string.
- * @param input input string of the function (either HEX or binary)
- * @param base original radix (2 for binary input and 16 for HEX input)
- * @returns converted string
- */
-const convertBinHex = (input: string, base: number): string => {
-  let convertedString = '';
-
-  if (base === 16) { //convert from HEX to binary
-    const splitHex = baseJS.splitBinHex(input, 16);
-    let bin = '';
-    splitHex.forEach(e => {
-      bin += (parseInt(e, 16).toString(2)).padStart(8, '0');
-    });
-    convertedString = bin;
-  } else if (base === 2) { //convert from binary to HEX
-    const hex = (parseInt(input, 2).toString(16).toUpperCase()).padStart(2, '0');
-    convertedString = hex;
-  } else {
-    console.log('Error! Base for convertBinHex is not 2 or 16!');
-  }
-
-  return convertedString;
-}
-
-/**
  * Searches for indexes of two-dimensional array
  * @param input string for each it looks for in an array
  * @param array array of strings to look in
@@ -148,7 +122,7 @@ export const pack = (input: string): string => {
   }
 
   octetArr.forEach(element => {
-    let hexElement = convertBinHex(element, 2);
+    let hexElement = baseJS.convertBinHex(element, 2);
     packed += hexElement;
   });
 
@@ -163,7 +137,7 @@ export const pack = (input: string): string => {
 export const upack = (input: string): string => {
   let unpacked = '';
 
-  const binInput = convertBinHex(input, 16);
+  const binInput = baseJS.convertBinHex(input, 16);
   const binOctets = baseJS.splitBinHex(binInput, 2);
   const binOctetsLength = binOctets.length / 7;
   let binOctetsTemp: string[] = [];
