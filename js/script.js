@@ -150,9 +150,10 @@ $('#submit').on('click', function () {
         $('.udh-row').hide();
     }
     if ($('#unpack-msg-radio').is(':checked')) {
-        $('#udhl-cell').text(decodeBody(String($('#input').val()), udh, alphabet)[0]);
-        $('#udh-cell').html('<p>' + decodeBody(String($('#input').val()), udh, alphabet)[1] + '</p><p>Reference Number: ' + decodeBody(String($('#input').val()), udh, alphabet)[2] + '</p><p>Total Parts: ' + decodeBody(String($('#input').val()), udh, alphabet)[3] + '</p><p>Current Part: ' + decodeBody(String($('#input').val()), udh, alphabet)[4] + '</p>');
-        $('#output').val(decodeBody(String($('#input').val()), udh, alphabet)[5]);
+        const result = decodeBody(String($('#input').val()), udh, alphabet);
+        $('#udhl-cell').text(result[0]);
+        $('#udh-cell').html('<p>' + result[1] + '</p><p>Reference Number: ' + result[2] + '</p><p>Total Parts: ' + result[3] + '</p><p>Current Part: ' + result[4] + '</p>');
+        $('#output').val(result[5]);
     }
     ;
     if ($('#pack-msg-radio').is(':checked')) {
