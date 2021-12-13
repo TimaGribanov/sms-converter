@@ -6,8 +6,10 @@ import * as baseJS from './base.js';
  */
 export const pack = (input) => {
     let packed = '';
+    console.log(input);
     for (let i = 0; i < input.length; i++) {
-        packed += input.charCodeAt(i).toString(16).padStart(4, '0').toUpperCase;
+        packed += input.charCodeAt(i).toString(16).padStart(4, '0').toUpperCase();
+        console.log(packed);
     }
     return packed;
 };
