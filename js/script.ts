@@ -140,7 +140,9 @@ $('#pack-msg-radio').on('click', function () {
    $('#unpack-msg-radio').prop('checked', false);
    $('#pack-msg-radio').prop('checked', true);
    $('#udh-checkbox').prop('disabled', true);
-   $('#udh-checkbox').prop('checked', false);
+   if ($('#udh-checkbox').prop('checked', true)) {
+      $('#udh-checkbox').prop('checked', false);
+   }
 })
 
 $('#submit').on('click', function () {
@@ -158,7 +160,10 @@ $('#submit').on('click', function () {
 
    if ($('#udh-checkbox').is(':checked')) {
       udh = true
+   } else {
+      udh = false
    }
+   console.log(udh);
 
    if (udh) {
       $('.udh-row').show();
