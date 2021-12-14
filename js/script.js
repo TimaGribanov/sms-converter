@@ -1,4 +1,3 @@
-/// <reference types="jquery" />
 import * as gsm7 from './gsm7.js';
 import * as ucs2 from './ucs2.js';
 import * as eightBit from './8bit.js';
