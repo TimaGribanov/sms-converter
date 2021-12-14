@@ -133,6 +133,7 @@ $('#8bit-radio').on('click', function () {
 $('#unpack-msg-radio').on('click', function () {
    $('#unpack-msg-radio').prop('checked', true);
    $('#pack-msg-radio').prop('checked', false);
+   $('#udh-checkbox').prop('disabled', false);
 })
 
 $('#pack-msg-radio').on('click', function () {
@@ -171,5 +172,8 @@ $('#submit').on('click', function () {
       $('#udh-cell').html('<p>' + result[1] + '</p><p>Reference Number: ' + result[2] + '</p><p>Total Parts: ' + result[3] + '</p><p>Current Part: ' + result[4] + '</p>');
       $('#output').val(result[5]);
    };
-   if ($('#pack-msg-radio').is(':checked')) { $('#output').val(codeBody(String($('#input').val()), alphabet)) };
+
+   if ($('#pack-msg-radio').is(':checked')) {
+      $('#output').val(codeBody(String($('#input').val()), alphabet))
+   };
 });

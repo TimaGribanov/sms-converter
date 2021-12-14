@@ -123,6 +123,7 @@ $('#8bit-radio').on('click', function () {
 $('#unpack-msg-radio').on('click', function () {
     $('#unpack-msg-radio').prop('checked', true);
     $('#pack-msg-radio').prop('checked', false);
+    $('#udh-checkbox').prop('disabled', false);
 });
 $('#pack-msg-radio').on('click', function () {
     $('#unpack-msg-radio').prop('checked', false);
